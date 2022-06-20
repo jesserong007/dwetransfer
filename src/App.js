@@ -1,12 +1,14 @@
 import './App.css';
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { FileUploader } from './components/FileUploader';
 import { Success } from './components/Success';
 import { Error } from './components/Error';
 import { Sending } from './components/Sending';
+import { ShowFiles } from './components/ShowFiles';
+import { Login } from './components/Login';
 
-import { Container, Card } from "react-bootstrap";
+import { Button, Container, Card } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from './assets/dwetransfer-logo.png';
 import Background from './assets/background.jpg';
@@ -15,6 +17,32 @@ function App() {
   const [cids,setCids]              = useState([]);
   const [ipfsError,setIpfsError]    = useState(false);
   const [sending, setSendingState]  = useState(false);
+  const [isShowList,setIsShowList]  = useState(false);
+  const [isLogin,setIsLogin]        = useState(false);
+
+  const checkLogin = () => {
+    const api_token = sessionStorage.getItem('api_token');
+    //console.log(api_token);
+    if(api_token) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+
+    setIpfsError(false);
+    setSendingState(false);
+    setIsShowList(false);
+    setCids([]);
+  }
+
+  const Logout = () => {
+    sessionStorage.removeItem('api_token');
+    window.location.reload();
+  } 
+
+  useEffect(() => {
+    checkLogin()
+  },[])
 
   return (
     <div className="App" style={{ backgroundImage: `url(${Background})` }}>
@@ -26,10 +54,18 @@ function App() {
                 WeTransfer in the Web 3.0 
               </Card.Title>
               <div>
-                { (cids.length === 0) && (sending === false) ? <FileUploader setCids={setCids} setIpfsError={setIpfsError} setSendingState={setSendingState} /> :null }
-                { cids.length !== 0 ? <Success cids={cids} setCids={setCids} setSendingState={setSendingState} /> : null }
-                { sending ? <Sending setSendingState={setSendingState}/> : null }
-                { ipfsError ? <Error setIpfsError={setIpfsError} setSendingState={setSendingState}/> : null }
+                { isLogin ?
+                  <div>
+                    { (cids.length === 0) && (sending === false) && (!isShowList) ? <FileUploader setCids={setCids} setIpfsError={setIpfsError} setSendingState={setSendingState} /> :null }
+                    { (cids.length !== 0) && (!isShowList) ? <Success cids={cids} setCids={setCids} setSendingState={setSendingState} /> : null }
+                    { sending && !isShowList ? <Sending setSendingState={setSendingState}/> : null }
+                    { ipfsError && !isShowList ? <Error setIpfsError={setIpfsError} setSendingState={setSendingState}/> : null }
+                    { isShowList ? <ShowFiles /> : <Button className="btn-showList" variant="white" type="button" onClick={()=>{setIsShowList(true)}}>See Send List</Button> }
+                  </div> : <Login setIsLogin={setIsLogin} />
+                }
+              </div>
+              <div>
+                { isLogin ? <Button className='btn-logout' variant="white" type="button" onClick={Logout}>Logout</Button> : null}
               </div>
             </Card.Body>
           </Card>

@@ -52,6 +52,65 @@
   border: 1px solid #ddd !important; 
 }
 
+.btn-showList {
+  color:blue !important;
+  margin-top: 33px;
+  border: 1px solid blue !important; 
+}
+
 .btnGroup {
   margin-top:43px; 
+}
+
+.card {
+  width: 30rem !important;
+}
+
+.card-img, .card-img-bottom, .card-img-top {
+  width: 260px !important;
+  margin: 0 auto;
+}
+
+.btn-getMore {
+  width: 200px;
+  color:blue !important;
+  margin-top: 33px;
+  border: 1px solid blue !important; 
+}
+
+.btn-delete {
+  color:red;
+  cursor: pointer;
+}
+
+.ipt-group {
+  margin-top: 25px;
+}
+
+.ipt {
+  width: 250px;
+  height: 44px;
+  border:1px solid #ddd;
+  border-radius: 4px;
+  margin: 0 auto;
+  padding-left: 12px;
+}
+
+.btn-login {
+  width: 250px;
+  margin-top: 25px;
+}
+
+.btn-s {
+  margin: 20px auto; 
+}
+
+.inputFile {
+  width: 250px;
+  margin:0 auto;
+  margin-top: 17px; 
+}
+
+.btn-logout {
+  margin:45px auto;
 }

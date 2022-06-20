@@ -1,40 +1,60 @@
 import {useState} from 'react';
 import { Button, Alert , Form } from "react-bootstrap";
 import { Web3Storage } from 'web3.storage/dist/bundle.esm.min.js';
-
+import axios from 'axios';
 
 export const FileUploader = ({setCids, setIpfsError, setSendingState}) => {
     
     const [files,setFiles]   = useState([]);
+    const [email,setEmail]   = useState("");
     
     const onInputChange = async (event) => {
-        let file = event.target.files;
+        let fileArr = event.target.files;
 
-        let isExist = await checkFile(...file);
+        if(!fileArr || fileArr.length <= 0) return;
 
-        if(isExist) return;
+        for (var i = 0 ; i < fileArr.length ; i++) {
+            let isExist = await checkFile(fileArr[i]);
 
-        files.push(...file);
-        setFiles(files);
+            if(isExist) continue;
 
-        // 显示已选择的文件
-        let node   = document.createElement("li");
-        let textNode = document.createTextNode(file[0].name);
-        node.appendChild(textNode);
-        document.getElementById("filesList").appendChild(node);
+            files.push(fileArr[i]);
+
+            // 显示已选择的文件
+            let node     = document.createElement("li");
+            let textNode = document.createTextNode(fileArr[i].name);
+            node.appendChild(textNode);
+            document.getElementById("filesList").appendChild(node);
+        }
+
         document.getElementById("fl0").style.display = 'block';
+
+        setFiles(files);
     }
 
     const onSubmit = async (event) => {
         event.preventDefault();
 
-        const client = new Web3Storage({ token: process.env.REACT_APP_WEB3STORAGE_API_TOKEN });
+        if(!email) {
+            alert('Please input email.');
+            return;
+        }
+
+        if(files.length <= 0) {
+            alert('Please select files.');
+            return;
+        }
+
+        const token  = sessionStorage.getItem('api_token');
+        const client = new Web3Storage({ token: token });
 
         try {
             setSendingState(true);
             const rootCid = await client.put(files);
+            const link    = "https://" + rootCid + ".ipfs.dweb.link";
             console.log("Successfully sent to IPFS");
-            console.log("https://" + rootCid + ".ipfs.dweb.link");
+            console.log(link);
+            sendEmail(email,link);
             setCids([rootCid]);
         } catch(e) {
             setIpfsError(true);
@@ -43,6 +63,30 @@ export const FileUploader = ({setCids, setIpfsError, setSendingState}) => {
             setSendingState(false);
         }
 
+    }
+
+    //发邮件
+    const sendEmail = (email,link) => {
+        let data = {
+            email:email,
+            link:link
+        };
+
+        axios.post("https://book.pharmasolution.com.cn/web3/sendEmail",data,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }).then((res) => {
+            if(res.data.code === 0) {
+                
+                return;
+            } else {
+                
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     // 重新选择
@@ -64,10 +108,16 @@ export const FileUploader = ({setCids, setIpfsError, setSendingState}) => {
         return false;
     }
 
+    const setEmailData = (e) => {
+        setEmail(e.target.value);
+    }
+
     return (
         <div>
             <Form method="post" action="#" id="#"  onSubmit={onSubmit}>
-                <Form.Group className="mb-3 form-group files">
+                <input type='text' onChange={setEmailData} className="ipt" placeholder="Please input email." />
+
+                <Form.Group className="mb-3 form-group files inputFile">
                     <input type="file"
                         onChange={onInputChange}
                         className="form-control"

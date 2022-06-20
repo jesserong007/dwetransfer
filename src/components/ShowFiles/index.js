@@ -30,6 +30,7 @@ export const ShowFiles = () => {
         }
 
         if(list.length <= 0) {
+            setIsLoad(false);
             alert('No More Data');
             return;
         }

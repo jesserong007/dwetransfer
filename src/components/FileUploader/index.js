@@ -75,7 +75,7 @@ export const FileUploader = ({setCids, setIpfsError, setSendingState}) => {
         axios.post("https://book.pharmasolution.com.cn/web3/sendEmail",data,
             {
                 headers: {
-                    "Content-Type": "multipart/form-data"
+                    "Content-Type": "application/x-www-form-urlencoded"
                 }
             }).then((res) => {
             if(res.data.code === 0) {

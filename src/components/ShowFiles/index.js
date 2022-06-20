@@ -1,17 +1,97 @@
-import { Alert } from "react-bootstrap";
+import { Alert,Button } from "react-bootstrap";
+import { Web3Storage } from 'web3.storage/dist/bundle.esm.min.js';
+import { useEffect,useState } from "react";
+import axios from 'axios';
 
-export const ShowFiles = ({files}) => {  
+export const ShowFiles = () => {  
+
+    const [ lastDate,setLastDate ] = useState("");
+    const [ listData,setListData ] = useState([]);
+
+    const getFilesList = async (date) => {
+        const token         = sessionStorage.getItem('api_token');
+        const client        = new Web3Storage({ token: token });
+        const maxResults    = 5;
+        let list            = [];
+
+        let before = "";
+
+        if(!date) {
+            const d = new Date();
+            before  = d.toISOString();
+        } else {
+            before = date;
+        }
+
+        for await (const upload of client.list({ before, maxResults })) {
+            list.push(upload);
+        }
+
+        if(list.length <= 0) {
+            alert('No Data');
+            return;
+        }
+
+        setLastDate(list[list.length-1].created);
+
+        if(listData.length > 0) {
+            list = listData.concat(list);
+        }
+
+        setListData(list);
+    }
+
+    const onGoBack = () => {
+        window.location.reload();
+    }
+
+    const deleteFile = async (cid) => {
+        //const token = process.env.REACT_APP_WEB3STORAGE_API_TOKEN;
+        const token         = sessionStorage.getItem('api_token');
+        
+        axios.delete(
+            "https://api-staging.web3.storage/pins/"+cid,
+            {
+                headers: {
+                    "Accept": "*/*",
+                    "Authorization": "Bearer " + token
+                }
+            }
+        ).then((res) => {
+            if(res.response.status === 200) {
+                alert("Delete success !");
+                getFilesList("");
+            } else {
+                alert("Delete fail !");
+                return;
+            }
+        }).catch((err) => {
+            console.log(err);
+            if(err.response.status === 401) {
+                alert("Request API Pinning Access !");
+                return;
+            }
+        });
+    }
+
+    useEffect(() => {
+        getFilesList("");
+    },[])
 
     return (
         <div>
+            <Button variant='success' onClick={onGoBack}>
+                Go Back
+            </Button>
             <Alert variant='light'> 
                 Show Files List
             </Alert>
-            <ul className="ulList"> 
-                {files.map(function(data, index) {
-                    return <li key={index}>{data.name}</li>
+            <ul> 
+                {listData.map(function(data, index) {
+                    return <li key={index}><a href={"https://" + data.cid + ".ipfs.dweb.link" } target="_blank" rel="noreferrer">{data.cid}</a>  <a className='btn-delete' onClick={()=>{deleteFile(data.cid)}} rel="noreferrer">Delete</a></li>
                 })}
             </ul>
+            <Button className="btn-getMore" variant="white" type="button" onClick={()=>{getFilesList(lastDate)}}>Get More</Button>
         </div>
     )
 }

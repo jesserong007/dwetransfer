@@ -21,9 +21,9 @@ function App() {
   const [isLogin,setIsLogin]        = useState(false);
 
   const checkLogin = () => {
-    const api_token = sessionStorage.getItem('api_token');
-    //console.log(api_token);
-    if(api_token) {
+    const userEmail     = sessionStorage.getItem('user_email');
+    
+    if(userEmail) {
       setIsLogin(true);
     } else {
       setIsLogin(false);
@@ -37,6 +37,7 @@ function App() {
 
   const Logout = () => {
     sessionStorage.removeItem('api_token');
+    sessionStorage.removeItem('user_email');
     window.location.reload();
   } 
 

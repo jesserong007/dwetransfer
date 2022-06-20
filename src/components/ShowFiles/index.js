@@ -10,13 +10,21 @@ export const ShowFiles = () => {
     const [ isLoad,setIsLoad ]     = useState(false);
 
     const getFilesList = async (date) => {
-        const token         = sessionStorage.getItem('api_token');
-        const client        = new Web3Storage({ token: token });
+        const userEmail     = sessionStorage.getItem('user_email');
         const maxResults    = 5;
         let list            = [];
         let before          = "";
+        let token           = "";
 
         setIsLoad(true);
+
+        if(userEmail == 'jesse@qq.com') {
+            token = process.env.REACT_APP_WEB3STORAGE_API_TOKEN;
+        } else {
+            token = sessionStorage.getItem('api_token');
+        }
+
+        const client        = new Web3Storage({ token: token });
 
         if(!date) {
             const d = new Date();
@@ -50,9 +58,15 @@ export const ShowFiles = () => {
     }
 
     const deleteFile = async (cid) => {
-        //const token = process.env.REACT_APP_WEB3STORAGE_API_TOKEN;
-        const token         = sessionStorage.getItem('api_token');
+        const userEmail     = sessionStorage.getItem('user_email');
+        let token           = '';
         
+        if(userEmail == 'jesse@qq.com') {
+            token = process.env.REACT_APP_WEB3STORAGE_API_TOKEN;
+        } else {
+            token = sessionStorage.getItem('api_token');
+        }
+
         axios.delete(
             "https://api-staging.web3.storage/pins/"+cid,
             {

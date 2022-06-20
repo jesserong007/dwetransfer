@@ -1,74 +1,21 @@
-Website: https://sparkling-truth-1029.on.fleek.co
+# Dwetransfer Dapp
 
-Test Account: jesse@qq.com   Password: jesse123456 
+#### 功能描述
 
-# Getting Started with Create React App
+1. 用户可以在 Dwetransfer Dapp 中通过填写邮箱，密码和自己的Web3Storage的API token来注册一个帐号，然后进行登录，实现了每个用户只使用自己的Web3Storage的API token。
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+2. 登录成功后，用户可填写接收的邮箱，和选择需要上传的文件，然后点击“Send via IPFS”按钮即可把文件上传到Web3Storage，并把文件的IPFS地址以邮件的形式发送到接收的邮箱。
 
-## Available Scripts
+3. 点击“See Send List”按钮即可进入已发送文件的列表页，点击‘Get More’可加载下一页，可以查看所有已发送的文件，也可以对文件进行删除（删除接口需要在Web3Storage后台申请）。
 
-In the project directory, you can run:
+4. 点击“Logout”即可退出登录。
 
-### `npm start`
+#### 网站地址 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+https://sparkling-truth-1029.on.fleek.co
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+测试帐号: jesse@qq.com   密码: jesse123456 
 
-### `npm test`
+#### 可以优化的想法
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+目前注册的帐号是保存到中心化的数据库，用户的密码和api token可能存在泄漏的风险，后期可通过编写智能合约，把用户的api token保存到区块链。

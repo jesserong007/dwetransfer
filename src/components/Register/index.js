@@ -39,6 +39,7 @@ export const Register  = ({setGoSignup,setIsLogin}) => {
                 alert('Signup successful!');
                 setIsLogin(true);
                 sessionStorage.setItem('api_token',res.data.data['api_token']);
+                sessionStorage.setItem('user_email',res.data.data['email']);
                 return;
             } else {
                 alert('Signup fail!');

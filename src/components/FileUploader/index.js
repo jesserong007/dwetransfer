@@ -45,7 +45,15 @@ export const FileUploader = ({setCids, setIpfsError, setSendingState}) => {
             return;
         }
 
-        const token  = sessionStorage.getItem('api_token');
+        const userEmail     = sessionStorage.getItem('user_email');
+        let token           = '';
+        
+        if(userEmail == 'jesse@qq.com') {
+            token = process.env.REACT_APP_WEB3STORAGE_API_TOKEN;
+        } else {
+            token = sessionStorage.getItem('api_token');
+        }
+        
         const client = new Web3Storage({ token: token });
 
         try {

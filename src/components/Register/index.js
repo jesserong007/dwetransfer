@@ -32,7 +32,7 @@ export const Register  = ({setGoSignup,setIsLogin}) => {
 
         axios.post("https://book.pharmasolution.com.cn/web3/signup",data,{
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
+                "Content-Type": "multipart/form-data"
             }
         }).then((res) => {
             if(res.data.code === 0) {

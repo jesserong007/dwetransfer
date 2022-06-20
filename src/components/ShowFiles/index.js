@@ -1,4 +1,4 @@
-import { Alert,Button } from "react-bootstrap";
+import { Alert,Button,Spinner } from "react-bootstrap";
 import { Web3Storage } from 'web3.storage/dist/bundle.esm.min.js';
 import { useEffect,useState } from "react";
 import axios from 'axios';
@@ -7,14 +7,16 @@ export const ShowFiles = () => {
 
     const [ lastDate,setLastDate ] = useState("");
     const [ listData,setListData ] = useState([]);
+    const [ isLoad,setIsLoad ]     = useState(false);
 
     const getFilesList = async (date) => {
         const token         = sessionStorage.getItem('api_token');
         const client        = new Web3Storage({ token: token });
         const maxResults    = 5;
         let list            = [];
+        let before          = "";
 
-        let before = "";
+        setIsLoad(true);
 
         if(!date) {
             const d = new Date();
@@ -28,7 +30,7 @@ export const ShowFiles = () => {
         }
 
         if(list.length <= 0) {
-            alert('No Data');
+            alert('No More Data');
             return;
         }
 
@@ -39,6 +41,7 @@ export const ShowFiles = () => {
         }
 
         setListData(list);
+        setIsLoad(false);
     }
 
     const onGoBack = () => {
@@ -91,6 +94,13 @@ export const ShowFiles = () => {
                     return <li key={index}><a href={"https://" + data.cid + ".ipfs.dweb.link" } target="_blank" rel="noreferrer">{data.cid}</a>  <a className='btn-delete' onClick={()=>{deleteFile(data.cid)}} rel="noreferrer">Delete</a></li>
                 })}
             </ul>
+            {isLoad ?
+                <div>
+                    <Spinner animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div> : null
+            }
             <Button className="btn-getMore" variant="white" type="button" onClick={()=>{getFilesList(lastDate)}}>Get More</Button>
         </div>
     )

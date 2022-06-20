@@ -1,7 +1,6 @@
 Website: https://sparkling-truth-1029.on.fleek.co
 
-Test Account: jesse@qq.com
-Test Password: jesse123456 
+Test Account: jesse@qq.com   Password: jesse123456 
 
 # Getting Started with Create React App
 
